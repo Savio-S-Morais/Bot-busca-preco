@@ -1,3 +1,6 @@
+#Dados de acesso ao email
+dados_email.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
