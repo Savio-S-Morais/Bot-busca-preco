@@ -1,5 +1,8 @@
-#Dados de acesso ao email
-dados_email.json
+# Dados de acesso ao email
+dados.json
+
+# Planilha de preços
+historico_preco.xlsx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
