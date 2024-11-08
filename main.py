@@ -4,6 +4,7 @@ import pandas as pd
 import requests
 import json
 import time
+import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 from email.mime.text import MIMEText
@@ -15,20 +16,37 @@ def variaveis_json(caminho_arquivo='D:/Repositorios pessoais/Bot-busca-preco/dad
         valores_json = json.load(file)
     return valores_json
 
+import requests
+from bs4 import BeautifulSoup
+
 def obter_preco(url):
     # Fazer a requisição HTTP para o site
     response = requests.get(url)
-    response.raise_for_status() # Verifica se a requisição foi bem sucedida
+    response.raise_for_status()  # Verifica se a requisição foi bem sucedida
+    
     # Parsear o conteúdo HTML
     soup = BeautifulSoup(response.text, "lxml")
     
     elemento_preco = soup.find('p', {'class':'sc-dcJsrY eLxcFM sc-jdkBTo etFOes'})
     
     if elemento_preco:
-        preco = elemento_preco.text.strip().replace('R$', '').replace(',','.')
-        return float(preco)
+        # Extrair o texto, removendo 'ou' e espaços adicionais
+        preco_texto = elemento_preco.text.strip().replace('R$', '').replace('\xa0', ' ')
+        
+        # Usar uma expressão regular para capturar apenas números e a vírgula
+        preco_formatado = re.sub(r'[^0-9,]', '', preco_texto)  # Remove qualquer coisa que não seja número ou vírgula
+        
+        # Substituir a vírgula por ponto para o formato de float
+        preco_formatado = preco_formatado.replace(',', '.')
+        
+        try:
+            # Tentar converter o valor para float
+            return float(preco_formatado)
+        except ValueError:
+            raise ValueError(f"Não foi possível converter o preço '{preco_formatado}' para float.")
     else:
         raise ValueError("Preço não encontrado na página")
+
     
 # Salvar o preço em uma planilha
 def salvar_preco_planilha(preco, url, nome_arquivo='historico_preco.xlsx'):
