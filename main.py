@@ -55,18 +55,20 @@ def salvar_preco_planilha(preco, url, nome_arquivo='historico_preco.xlsx'):
         df = pd.read_excel(nome_arquivo)
     except FileNotFoundError:
         df = pd.DataFrame(columns=['Data', 'Preço', 'URL'])
-        
-    # Adicionar nova linha com data e preço
-    nova_linha = {
-        'Data': datetime.now().strftime('%d/%m/%Y'),
-        'Preço': preco,
-        'URL': url
-    }
     
-    df = df.append(nova_linha, ignore_index=True)
+    # Adicionar nova linha com data e preço
+    nova_linha = pd.DataFrame({
+        'Data': [datetime.now().strftime('%d/%m/%Y')],
+        'Preço': [preco],
+        'URL': [url]
+    })
+    
+    # Usar pd.concat() para adicionar a nova linha
+    df = pd.concat([df, nova_linha], ignore_index=True)
     
     # Salvar o DataFrame no arquivo Excel
     df.to_excel(nome_arquivo, index=False)
+
 
 
 # Enviar e-mail de alerta
