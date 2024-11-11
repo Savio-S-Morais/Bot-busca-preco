@@ -11,7 +11,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 # Acessando arquivo JSON com os dados do email origem
-def variaveis_json(caminho_arquivo='D:/Repositorios pessoais/Bot-busca-preco/dados.json'):
+def variaveis_json(caminho_arquivo='dados.json'):
     with open(caminho_arquivo, 'r') as file:
         valores_json = json.load(file)
     return valores_json
