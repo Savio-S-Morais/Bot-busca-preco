@@ -19,6 +19,19 @@ def variaveis_json(caminho_arquivo='dados.json'):
 import requests
 from bs4 import BeautifulSoup
 
+def obter_nome(url):
+    # Fazer a requisição HTTP para o site
+    response = requests.get(url)
+    response.raise_for_status()  # Verifica se a requisição foi bem sucedida
+    
+    # Parsear o conteúdo HTML
+    soup = BeautifulSoup(response.text, "lxml")
+    
+    elemento_nome = soup.find('h1', {'class':'sc-dcJsrY jjGTqv'})
+    
+    return elemento_nome.text.strip()
+    # (f"Não foi possível converter o preço '{elemento_preco}' para float.")
+
 def obter_preco(url):
     # Fazer a requisição HTTP para o site
     response = requests.get(url)
@@ -97,7 +110,8 @@ def monitorar_preco(url, preco_desejado, email_destino, email_origem, senha_orig
     while True:
         try:
             preco_atual = obter_preco(url)
-            print(f"Preço atual: R${preco_atual:.2f}")
+            nome_produto = obter_nome(url)
+            print(f"Preço atual do produto '{nome_produto}' é de: R${preco_atual:.2f}")
             
             # Salvar o preço na planilha
             salvar_preco_planilha(preco_atual, url)
