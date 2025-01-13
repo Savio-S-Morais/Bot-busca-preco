@@ -1,5 +1,6 @@
-# Dados de acesso ao email
+# Arquivos JSON
 dados.json
+lista_de_compras.json
 
 # Planilha de preços
 historico_preco.xlsx
